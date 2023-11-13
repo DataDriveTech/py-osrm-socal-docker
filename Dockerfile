@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:slim-bookworm
+FROM python:3.11-slim-bookworm
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -33,8 +33,11 @@ RUN apt-get update && apt install -y \
     xlsx2csv \
     curl \
     wget && rm -rf /var/lib/apt/lists/* \
-    && git clone --depth 1 --branch v5.27.1 https://github.com/Project-OSRM/osrm-backend.git && \
+    && git clone --depth 1 --branch master https://github.com/Project-OSRM/osrm-backend.git && \
     cd osrm-backend && mkdir -p build && cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-Wno-array-bounds -Wno-uninitialized" -DBUILD_SHARED_LIBS=ON && \
     cmake --build . && cmake --build . --target install && cp -r /osrm-backend/profiles/* /opt/ && rm -rf /osrm-backend && \
-    ldconfig && mkdir /osm && cd /osm && wget https://download.geofabrik.de/north-america/us/california/socal-latest.osm.pbf && osrm-extract -p /opt/car.lua socal-latest.osm.pbf && osrm-partition socal-latest.osm.pbf && osrm-customize socal-latest.osm.pbf
+    ldconfig && mkdir /osm && cd /osm && wget https://download.geofabrik.de/north-america/us/california/socal-latest.osm.pbf && \
+    osrm-extract -p /opt/car.lua socal-latest.osm.pbf && \
+    osrm-contract socal-latest.osrm && \
+    osrm-datastore socal-latest.osrm
