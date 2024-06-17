@@ -10,14 +10,7 @@ ENV DEBUG 0
 RUN apt-get update && apt install -y \
     --no-install-recommends \  
     git \
-    build-essential \
     cmake \
-    autoconf \
-    libtool \
-    zlib1g-dev \
-    lsb-release \
-    python3-venv \
-    build-essential \
     pkg-config \
     libbz2-dev \
     libstxxl-dev \
@@ -28,10 +21,6 @@ RUN apt-get update && apt install -y \
     lua5.4 \
     liblua5.4-dev \
     libtbb-dev \
-    libomp-dev \
-    python3-dev \
-    xlsx2csv \
-    curl \
     wget && rm -rf /var/lib/apt/lists/* \
     && git clone --depth 1 --branch master https://github.com/Project-OSRM/osrm-backend.git && \
     cd osrm-backend && mkdir -p build && cd build && \
