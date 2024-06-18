@@ -7,5 +7,5 @@ docker build -t py-osrm-socal .
 
 ## Publish
 
-docker image tag py-osrm-socal sebmilardo/py-osrm-socal:latest
-docker image push sebmilardo/py-osrm-socal:latest
+docker image tag py-osrm-socal sebmilardo/py-osrm-socal:24.06
+docker image push sebmilardo/py-osrm-socal:24.06
