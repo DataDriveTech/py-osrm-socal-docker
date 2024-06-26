@@ -44,7 +44,7 @@ FROM python:3.12-slim-bookworm as runstage
 
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /opt /opt
-COPY --from=builder /osm /osm
+COPY --from=builder /osm/socal-latest.osrm.* /osm
 COPY --from=builder /venv /venv
 
 ENV PATH=/venv/bin:$PATH
