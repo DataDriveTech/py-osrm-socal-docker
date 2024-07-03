@@ -38,13 +38,14 @@ RUN mkdir /osm && cd /osm && wget https://download.geofabrik.de/north-america/us
     osrm-extract -p /opt/car.lua socal-latest.osm.pbf && \
     osrm-contract socal-latest.osrm && \
     osrm-datastore socal-latest.osrm
+RUN rm -rf /osm/socal-latest.osm.pbf
 
 # Multistage build to reduce image size
 FROM python:3.12-slim-bookworm as runstage
 
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /opt /opt
-COPY --from=builder /osm/socal-latest.osrm.* /osm
+COPY --from=builder /osm /osm
 COPY --from=builder /venv /venv
 
 ENV PATH=/venv/bin:$PATH
