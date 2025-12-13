@@ -1,5 +1,5 @@
 # py-osrm-docker
-Python and OSRM C++ in one docker image + Southern California Map 
+Python and OSRM C++ in one docker image + Southern California and Colorado Maps 
 
 ## Build
 
