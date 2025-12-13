@@ -8,7 +8,7 @@ ENV DEBUG 0
 
 # Install requirements
 RUN apt-get update && \
-    apt-get -y --no-install-recommends install ca-certificates cmake make git gcc g++ libbz2-dev libxml2-dev wget \
+    apt-get -y --no-install-recommends install ca-certificates cmake make git gcc g++ libbz2-dev libxml2-dev osmium-tool wget \
     libzip-dev libboost1.81-all-dev lua5.4 liblua5.4-dev pkg-config wget zlib1g-dev -o APT::Install-Suggests=0 -o APT::Install-Recommends=0
 
 RUN ldconfig /usr/local/lib && \
@@ -34,12 +34,16 @@ ENV PATH=/venv/bin:$PATH
 
 RUN pip install nanobind==1.9.2 
 RUN pip install git+https://github.com/whytro/py-osrm@dev
-RUN mkdir /osm && cd /osm && wget https://download.geofabrik.de/north-america/us/california/socal-latest.osm.pbf && \
-    osrm-extract -p /opt/car.lua socal-latest.osm.pbf && \
-    osrm-contract socal-latest.osrm && \
-    osrm-datastore socal-latest.osrm
-RUN rm -rf /osm/socal-latest.osm.pbf
 
+RUN mkdir /osm && cd /osm && \
+    wget https://download.geofabrik.de/north-america/us/california/socal-latest.osm.pbf && \
+    wget https://download.geofabrik.de/north-america/us/colorado-latest.osm.pbf && \
+    osmium merge socal-latest.osm.pbf colorado-latest.osm.pbf -o ca-co.osm.pbf && \
+    osrm-extract -p /opt/car.lua ca-co.osm.pbf && \
+    osrm-contract ca-co.osrm && \
+    osrm-datastore ca-co.osrm && \
+    rm -f *.osm.pbf
+    
 # Multistage build to reduce image size
 FROM python:3.12-slim-bookworm as runstage
 
