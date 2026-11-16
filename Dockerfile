@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
-FROM python:3.12-slim-bookworm as builder
+FROM astral/uv:python3.13-bookworm-slim AS builder    
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV DEBUG 0
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DEBUG=0
 
 # Install requirements
 RUN apt-get update && \
@@ -45,7 +45,7 @@ RUN mkdir /osm && cd /osm && \
     rm -f *.osm.pbf
     
 # Multistage build to reduce image size
-FROM python:3.12-slim-bookworm as runstage
+FROM astral/uv:python3.13-bookworm-slim AS runstage
 
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /opt /opt
